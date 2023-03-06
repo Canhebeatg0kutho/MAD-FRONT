@@ -1,7 +1,7 @@
 // import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { Button, Text, View } from 'react-native'
+import { Button, Text, View, TextInput } from 'react-native'
 import {useState} from 'react'
 
 const Stack = createNativeStackNavigator()
@@ -19,10 +19,10 @@ export default App = () => {
           name="Fetch"
           component={FetchScreen}
         />
-         {/* <Stack.Screen
+         <Stack.Screen
           name="Find"
           component={FindScreen}
-        /> */}
+        />
       </Stack.Navigator>
       
     </NavigationContainer>
@@ -51,7 +51,6 @@ const HomeScreen = ({ navigation }) => {
 
 const FetchScreen = ({ navigation }) => {
   const [products, setProducts] = useState([])
-  const [Allproducts,setAll]= useState([])
 
   const callAPI = async () => {
     try {
@@ -67,10 +66,8 @@ const FetchScreen = ({ navigation }) => {
         }
       )
       const data = await res.json()
-      setAll(data)
       setProducts(data)
-      console.log(products.name)
-    } catch (err) {
+        } catch (err) {
       console.log(err)
     }
   }
@@ -82,7 +79,7 @@ const FetchScreen = ({ navigation }) => {
     />
     <Text>
    {products.map((product) => (
-     <Text>{product.name}</Text> 
+     <Text key={product._id}>{product.name} {product.price}</Text> 
    ))}
   </Text>
   </View>
@@ -90,42 +87,53 @@ const FetchScreen = ({ navigation }) => {
 }
 
 
-// const FindScreen = ({ navigation }) => {
-//   const [text, setText] = useState([])
-//   const callAPI = async () => {
-//     try {
-//       const res = await fetch(
-//         `https://2b2a-193-1-57-1.eu.ngrok.io`,
-//         {
-//           method: 'POST',
-//           headers: {
-//             'Content-Type': 'application/json',
-//             "ngrok-skip-browser-warning": "69420" // See: https://stackoverflow.com/questions/73017353/how-to-bypass-ngrok-browser-warning
-//           },
-//           data:{
-//             name,
-//           }
-//         //  body: JSON.stringify( { testData: 'Test data sent to server' } ) // Need to use POST to send body
-//         }
-//       )
-//       const data = await res.json()
-//       setText(JSON.stringify(data))
-//       console.log(text?.name)
-//     } catch (err) {
-//       console.log(err)
-//     }
-//   }
+const FindScreen = ({ navigation }) => {
+  const [products, setProduct] = useState([])
+  const [found,setFind]= useState('')
+  const callAPI = async () => {
+    try {
+       const response = await fetch(
+        `https://9104-193-1-57-1.eu.ngrok.io/find`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            "ngrok-skip-browser-warning": "69420" // See: https://stackoverflow.com/questions/73017353/how-to-bypass-ngrok-browser-warning
+          },
+          body: JSON.stringify({ 
+            name:found,
+           } ) // Need to use POST to send body
+        }
+      )
+      // .then((res)=>res.json())
+      // .then((json)=>console.log(json))
+      const data = await response.json()
+      setProduct(data)
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
-//   return (
-//   <View>
-//     <Button
-//       title="Go Fetch Some Products" onPress={async () => callAPI()}
-//     />
-//        <Text>{text}</Text>
+  return (
+  <View>
+      <TextInput
+        style={{ height: 40 }}
+        placeholder="Type text here!"
+        onChangeText={findProduct => setFind(findProduct)}
+        defaultValue={found}
+      />
+    <Button
+      title="Go Fetch Some Products" onPress={async () => callAPI({name: products})}
+    />
+    <Text>
+   {products.map((product) => (
+     <Text key={product._id}> {product.name}${product.price}</Text> 
+   ))}
+  </Text>
 
-//   </View>
-//   )
-// }
+  </View>
+  )
+}
 
 
 // const EditScreen = ({ navigation }) => {
