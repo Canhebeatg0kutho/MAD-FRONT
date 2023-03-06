@@ -79,7 +79,7 @@ const FetchScreen = ({ navigation }) => {
     />
     <Text>
    {products.map((product) => (
-     <Text key={product._id}>{product.name} {product.price}</Text> 
+     <Text key={product._id}>{product.name} {product.price} </Text>
    ))}
   </Text>
   </View>
