@@ -23,6 +23,10 @@ export default App = () => {
           name="Find"
           component={FindScreen}
         />
+        <Stack.Screen
+          name="Create"
+          component={CreateScreen}
+        />
       </Stack.Navigator>
       
     </NavigationContainer>
@@ -41,6 +45,12 @@ const HomeScreen = ({ navigation }) => {
       <Button
       title="Go to Find Screen"
       onPress={() => navigation.navigate('Find')
+      }
+    />
+
+     <Button
+      title="Go to Create Screen"
+      onPress={() => navigation.navigate('Create')
       }
     />
     </View>
@@ -92,7 +102,7 @@ const FindScreen = ({ navigation }) => {
   const [found,setFind]= useState('')
   const callAPI = async () => {
     try {
-       const response = await fetch(
+       const res = await fetch(
         `https://9104-193-1-57-1.eu.ngrok.io/find`,
         {
           method: 'POST',
@@ -107,8 +117,9 @@ const FindScreen = ({ navigation }) => {
       )
       // .then((res)=>res.json())
       // .then((json)=>console.log(json))
-      const data = await response.json()
+      const data = await res.json()
       setProduct(data)
+      console.log(data)
     } catch (err) {
       console.log(err)
     }
@@ -123,10 +134,10 @@ const FindScreen = ({ navigation }) => {
         defaultValue={found}
       />
     <Button
-      title="Go Fetch Some Products" onPress={async () => callAPI({name: products})}
+      title="Go Fetch Some Products" onPress={async () => callAPI({name: found})}
     />
-    <Text>
-   {products.map((product) => (
+  <Text>
+   { products.map((product) => (
      <Text key={product._id}> {product.name}${product.price}</Text> 
    ))}
   </Text>
@@ -136,43 +147,65 @@ const FindScreen = ({ navigation }) => {
 }
 
 
-// const EditScreen = ({ navigation }) => {
-//   const [text, setText] = useState([])
-//   const callAPI = async () => {
-//     try {
-//       const res = await fetch(
-//         `https://2b2a-193-1-57-1.eu.ngrok.io`,
-//         {
-//           method: 'POST',
-//           headers: {
-//             'Content-Type': 'application/json',
-//             "ngrok-skip-browser-warning": "69420" // See: https://stackoverflow.com/questions/73017353/how-to-bypass-ngrok-browser-warning
-//           },
-//           data:{
-//             name,
-//           }
-//         //  body: JSON.stringify( { testData: 'Test data sent to server' } ) // Need to use POST to send body
-//         }
-//       )
-//       const data = await res.json()
-//       setText(JSON.stringify(data))
-//       console.log(text?.name)
-//     } catch (err) {
-//       console.log(err)
-//     }
-//   }
+const CreateScreen = ({ navigation }) => {
+  const [products, setProduct] = useState([]);
+  const [productName,setName]= useState('')
+  const [productPrice,setPrice]= useState('')
+  const callAPI = async () => {
+    try {
+       const res = await fetch(
+        `https://9104-193-1-57-1.eu.ngrok.io/addProduct`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            "ngrok-skip-browser-warning": "69420" // See: https://stackoverflow.com/questions/73017353/how-to-bypass-ngrok-browser-warning
+          },
+          body: JSON.stringify({ 
+            name:productName,
+            price:productPrice
+           } ) // Need to use POST to send body
+        }
+      )
+      // .then((res)=>res.json())
+      // .then((json)=>console.log(json))
+      const data = await res.json()
+      if (Array.isArray(data)) {
+        setProduct(data);
+      }
+      console.log(data)
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
-//   return (
-//   <View>
-//     <Button
-//       title="Go Fetch Some Products" onPress={async () => callAPI()}
-//     />
-//        <Text>{text}</Text>
+  return (
+  <View>
+      <TextInput
+        style={{ height: 40 }}
+        placeholder="Type text here!"
+        onChangeText={nameProduct => setName(nameProduct)}
+        defaultValue={productName}
+      />
+       <TextInput
+        style={{ height: 40 }}
+        placeholder="Type text here!"
+        onChangeText={priceProduct => setPrice(priceProduct)}
+        defaultValue={productPrice}
+      />
 
-//   </View>
-//   )
-// }
+    <Button
+      title="Go Fetch Some Products" onPress={async () => callAPI({name: productName, price:productPrice})}
+    />
 
+  <Text>
+  {products.map((product) => (
+  <Text key={product._id}>{product.name}: ${product.price}</Text> 
+))}
+  </Text>
+  </View>
+  )
+}
 
 // const DeleteScreen = ({ navigation }) => {
 //   const [text, setText] = useState([])
