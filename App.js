@@ -27,6 +27,10 @@ export default App = () => {
           name="Create"
           component={CreateScreen}
         />
+         <Stack.Screen
+          name="Delete"
+          component={DeleteScreen}
+        />
       </Stack.Navigator>
       
     </NavigationContainer>
@@ -51,6 +55,11 @@ const HomeScreen = ({ navigation }) => {
      <Button
       title="Go to Create Screen"
       onPress={() => navigation.navigate('Create')
+      }
+    />
+      <Button
+      title="Go to Delete Screen"
+      onPress={() => navigation.navigate('Delete')
       }
     />
     </View>
@@ -89,7 +98,7 @@ const FetchScreen = ({ navigation }) => {
     />
     <Text>
    {products.map((product) => (
-     <Text key={product._id}>{product.name} {product.price} </Text>
+     <Text key={product._id}>{product.name}: ${product.price} {"\n"} </Text>
    ))}
   </Text>
   </View>
@@ -138,7 +147,7 @@ const FindScreen = ({ navigation }) => {
     />
   <Text>
    { products.map((product) => (
-     <Text key={product._id}> {product.name}${product.price}</Text> 
+     <Text key={product._id}> {product.name}: ${product.price} {"\n"}</Text> 
    ))}
   </Text>
 
@@ -207,39 +216,49 @@ const CreateScreen = ({ navigation }) => {
   )
 }
 
-// const DeleteScreen = ({ navigation }) => {
-//   const [text, setText] = useState([])
-//   const callAPI = async () => {
-//     try {
-//       const res = await fetch(
-//         `https://2b2a-193-1-57-1.eu.ngrok.io`,
-//         {
-//           method: 'POST',
-//           headers: {
-//             'Content-Type': 'application/json',
-//             "ngrok-skip-browser-warning": "69420" // See: https://stackoverflow.com/questions/73017353/how-to-bypass-ngrok-browser-warning
-//           },
-//           data:{
-//             name,
-//           }
-//         //  body: JSON.stringify( { testData: 'Test data sent to server' } ) // Need to use POST to send body
-//         }
-//       )
-//       const data = await res.json()
-//       setText(JSON.stringify(data))
-//       console.log(text?.name)
-//     } catch (err) {
-//       console.log(err)
-//     }
-//   }
 
-//   return (
-//   <View>
-//     <Button
-//       title="Go Fetch Some Products" onPress={async () => callAPI()}
-//     />
-//        <Text>{text}</Text>
+const DeleteScreen = ({ navigation }) => {
+  const [products, setProduct] = useState([])
+  const [id,setId]= useState('')
+  const callAPI = async (id) => {
+    try {
+       const res = await fetch(
+        `https://9104-193-1-57-1.eu.ngrok.io/deleteSpecificProduct/${id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            "ngrok-skip-browser-warning": "69420" // See: https://stackoverflow.com/questions/73017353/how-to-bypass-ngrok-browser-warning
+          },
+        }
+      )
+      const data = await res.json()
+      setProduct(data)
+      console.log(data)
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
-//   </View>
-//   )
-// }
+  return (
+  <View>
+      <TextInput
+        style={{ height: 40 }}
+        placeholder="Type text here!"
+        onChangeText={findProduct => setId(findProduct)}
+        defaultValue={id}
+      />
+    <Button
+      title="Delete Product" onPress={async () => callAPI(id)}
+    />
+  {/* <Text>
+   { products.map((product) => (
+     <Text key={product._id}> {product.name}: ${product.price} {"\n"}</Text> 
+   ))}
+  </Text> */}
+
+  </View>
+  )
+}
+
+
