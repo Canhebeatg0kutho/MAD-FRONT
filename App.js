@@ -251,11 +251,12 @@ const DeleteScreen = ({ navigation }) => {
     <Button
       title="Delete Product" onPress={async () => callAPI(id)}
     />
-  {/* <Text>
-   { products.map((product) => (
-     <Text key={product._id}> {product.name}: ${product.price} {"\n"}</Text> 
+
+  <Text>
+   { products > 0 && products.map((product) => (
+     <Text key={product._id}> Product Deleted:  {product.name}: ${product.price} {"\n"}</Text> 
    ))}
-  </Text> */}
+  </Text>
 
   </View>
   )
