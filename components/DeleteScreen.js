@@ -1,10 +1,10 @@
 import { Button, Text, View, TextInput, StyleSheet, Pressable } from 'react-native'
-import { useState,useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import React from 'react'
 
 export default function DeleteScreen() {
     const [products, setProduct] = useState([])
-    const [productList,setList]= useState([])
+    const [productList, setList] = useState([])
     const [id, setId] = useState('')
 
 
@@ -27,10 +27,10 @@ export default function DeleteScreen() {
             console.log(err)
         }
     }
-    
-    useEffect(()=>{
+
+    useEffect(() => {
         fetchAll()
-    },[])
+    }, [])
 
     const callAPI = async (id) => {
         try {
@@ -53,7 +53,7 @@ export default function DeleteScreen() {
     }
 
     return (
-        <View style = {style.container}>
+        <View style={style.container}>
             <TextInput
                 style={style.TextInput}
                 placeholder="Enter the ID of the product here!"
@@ -62,16 +62,20 @@ export default function DeleteScreen() {
             />
             <Pressable
                 style={style.button}
-                onPress={async () => {callAPI(id); fetchAll()}}
+                onPress={async () => { callAPI(id); fetchAll() }}
             ><Text style={style.text}>Delete Product</Text></Pressable>
-            
-            <Text>
-                {productList.map((product) => (
-                    <Text key={product._id}> {product.name}: ${product.price} ID:{product.ourId} {"\n"}</Text>
-                ))}
-            </Text>
-            
-            
+
+            {productList.map((product) => (
+                <Pressable
+                    key={product._id}
+                    style={style.button}
+                    onPress={() => callAPI(product.ourId)}
+                >
+                    <Text>{product.name}: ${product.price} ID:{product.ourId}</Text>
+                </Pressable>
+            ))}
+
+
 
         </View>
     )
@@ -100,4 +104,7 @@ const style = StyleSheet.create({
         borderWidth: 1,
         width: 300,
     },
+    productItem:{
+
+    }
 })
