@@ -39,13 +39,13 @@ export default function CreateScreen() {
     <View style={style.container}>
       <TextInput
         style={style.TextInput}
-        placeholder="Type text here!"
+        placeholder="Enter Name!"
         onChangeText={nameProduct => setName(nameProduct)}
         defaultValue={productName}
       />
       <TextInput
         style={style.TextInput}
-        placeholder="Type text here!"
+        placeholder="Enter Price!"
         onChangeText={priceProduct => setPrice(priceProduct)}
         defaultValue={productPrice}
       />
