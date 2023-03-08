@@ -68,14 +68,13 @@ export default function DeleteScreen() {
             {productList.map((product) => (
                 <Pressable
                     key={product._id}
-                    style={style.button}
-                    onPress={() => callAPI(product.ourId)}
+                    style={style.productPressed}
+                    onPress={() => {callAPI(product.ourId); }}
                 >
                     <Text>{product.name}: ${product.price} ID:{product.ourId}</Text>
                 </Pressable>
             ))}
-
-
+               
 
         </View>
     )
@@ -104,7 +103,14 @@ const style = StyleSheet.create({
         borderWidth: 1,
         width: 300,
     },
-    productItem:{
+    productPressed:{
+        marginTop: 20,
+        borderWidth: 1,
+        height: 30,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 300,
+        backgroundColor:"green"
+    },
 
-    }
 })
