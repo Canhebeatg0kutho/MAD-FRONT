@@ -1,8 +1,15 @@
 // import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { Button, Text, View } from 'react-native'
-import {useState} from 'react'
+import { Button, Pressable, Text, View, StyleSheet } from 'react-native'
+import { useState } from 'react'
+import React from 'react'
+
+import FetchScreen from "./components/FetchScreen"
+import CreateScreen from "./components/CreateScreen"
+import DeleteScreen from "./components/DeleteScreen"
+import FindScreen from "./components/FindScreen"
+import EditScreen from "./components/EditScreen"
 
 const Stack = createNativeStackNavigator()
 
@@ -19,179 +26,76 @@ export default App = () => {
           name="Fetch"
           component={FetchScreen}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="Find"
           component={FindScreen}
         />
+        <Stack.Screen
+          name="Create"
+          component={CreateScreen}
+        />
+        <Stack.Screen
+          name="Delete"
+          component={DeleteScreen}
+        />
+        <Stack.Screen
+          name="Edit"
+          component={EditScreen}
+        />
       </Stack.Navigator>
-      
     </NavigationContainer>
   )
 }
 
 const HomeScreen = ({ navigation }) => {
   return (
-    <View>
-     <Button
-      title="Go to Fetch Screen"
-      onPress={() => navigation.navigate('Fetch')
-      }
-    />
-
-      <Button
-      title="Go to Find Screen"
-      onPress={() => navigation.navigate('Find')
-      }
-    />
+    <View style={style.container}>
+      <Pressable
+        style={style.button}
+        title="Go to Fetch Screen"
+        onPress={() => navigation.navigate('Fetch')
+        }
+      ><Text style = {style.text}>Fetch</Text></Pressable>
+      <Pressable
+        title="Go to create screen"
+        style={style.button}
+        onPress={() => navigation.navigate('Find')}
+      ><Text style = {style.text}>Find Product</Text></Pressable>
+      <Pressable
+        title="Go to create screen"
+        style={style.button}
+        onPress={() => navigation.navigate('Create')}
+      ><Text style = {style.text}>Create Product</Text></Pressable>
+      <Pressable
+        title="Go to create screen"
+        style={style.button}
+        onPress={() => navigation.navigate('Edit')}
+      ><Text style = {style.text}>Edit Product</Text></Pressable>
+      <Pressable
+        title="Go to create screen"
+        style={style.button}
+        onPress={() => navigation.navigate('Delete')}
+      ><Text style = {style.text}>Delete Product</Text></Pressable>
     </View>
-   
-    
-  )
-}
-
-const FetchScreen = ({ navigation }) => {
-  const [products, setProducts] = useState([])
-  const callAPI = async () => {
-    try {
-      const res = await fetch(
-        `https://3bd7-193-1-57-1.eu.ngrok.io`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            "ngrok-skip-browser-warning": "69420" // See: https://stackoverflow.com/questions/73017353/how-to-bypass-ngrok-browser-warning
-          },
-        //  body: JSON.stringify( { testData: 'Test data sent to server' } ) // Need to use POST to send body
-        }
-      )
-      const data = await res.json()
-      setProducts(JSON.stringify(data))
-      console.log(data)
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  return (
-  <View>
-    <Button
-      title="Go Fetch Some Products" onPress={async () => callAPI()}
-    />
-       <Text>{products}</Text>
-  </View>
   )
 }
 
 
-const FindScreen = ({ navigation }) => {
-  const [text, setText] = useState([])
-  const callAPI = async () => {
-    try {
-      const res = await fetch(
-        `https://2b2a-193-1-57-1.eu.ngrok.io`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            "ngrok-skip-browser-warning": "69420" // See: https://stackoverflow.com/questions/73017353/how-to-bypass-ngrok-browser-warning
-          },
-          data:{
-            name,
-          }
-        //  body: JSON.stringify( { testData: 'Test data sent to server' } ) // Need to use POST to send body
-        }
-      )
-      const data = await res.json()
-      setText(JSON.stringify(data))
-      console.log(text?.name)
-    } catch (err) {
-      console.log(err)
-    }
-  }
+const style = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    width: "100%",
 
-  return (
-  <View>
-    <Button
-      title="Go Fetch Some Products" onPress={async () => callAPI()}
-    />
-       <Text>{text}</Text>
-
-  </View>
-  )
-}
-
-
-const EditScreen = ({ navigation }) => {
-  const [text, setText] = useState([])
-  const callAPI = async () => {
-    try {
-      const res = await fetch(
-        `https://2b2a-193-1-57-1.eu.ngrok.io`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            "ngrok-skip-browser-warning": "69420" // See: https://stackoverflow.com/questions/73017353/how-to-bypass-ngrok-browser-warning
-          },
-          data:{
-            name,
-          }
-        //  body: JSON.stringify( { testData: 'Test data sent to server' } ) // Need to use POST to send body
-        }
-      )
-      const data = await res.json()
-      setText(JSON.stringify(data))
-      console.log(text?.name)
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  return (
-  <View>
-    <Button
-      title="Go Fetch Some Products" onPress={async () => callAPI()}
-    />
-       <Text>{text}</Text>
-
-  </View>
-  )
-}
-
-
-const DeleteScreen = ({ navigation }) => {
-  const [text, setText] = useState([])
-  const callAPI = async () => {
-    try {
-      const res = await fetch(
-        `https://2b2a-193-1-57-1.eu.ngrok.io`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            "ngrok-skip-browser-warning": "69420" // See: https://stackoverflow.com/questions/73017353/how-to-bypass-ngrok-browser-warning
-          },
-          data:{
-            name,
-          }
-        //  body: JSON.stringify( { testData: 'Test data sent to server' } ) // Need to use POST to send body
-        }
-      )
-      const data = await res.json()
-      setText(JSON.stringify(data))
-      console.log(text?.name)
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  return (
-  <View>
-    <Button
-      title="Go Fetch Some Products" onPress={async () => callAPI()}
-    />
-       <Text>{text}</Text>
-
-  </View>
-  )
-}
+  },
+  button: {
+    marginTop: 20,
+    borderWidth: 1,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 300,
+    height: 100,
+  },
+})
